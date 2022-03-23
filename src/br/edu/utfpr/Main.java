@@ -1,25 +1,29 @@
 package br.edu.utfpr;
 
 import br.edu.utfpr.model.Aluno;
+import br.edu.utfpr.model.Model;
 import br.edu.utfpr.service.AlunoCRUDService;
 import br.edu.utfpr.service.impl.AlunoCRUDServiceImpl;
-import br.edu.utfpr.sql.TableControl;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        AlunoCRUDService service = new AlunoCRUDServiceImpl();
+        List<Model> models = List.of(new Aluno());
+        models.forEach(Model::createTable);
 
-        TableControl.createTablesV1();
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-        Aluno a1 = Aluno.builder()
-                .nome("Valicr Balbinotti Junior")
-                .email("balbinottijr@gmail.com")
-                .dataNascimento(LocalDate.parse("1994-11-09"))
-                .telefone("+55 46 99999-9999")
+        Aluno aluno = Aluno.builder()
+                .nome("João")
+                .telefone("123456789")
+                .email("joão@email.com")
+                .dataNascimento(LocalDate.parse("01/01/2000", df))
                 .build();
 
-        service.salvarAluno(a1);
+        AlunoCRUDService service = new AlunoCRUDServiceImpl();
+        service.salvarAluno(aluno);
     }
 }

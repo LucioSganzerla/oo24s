@@ -14,7 +14,7 @@ public class ConnectDataBase {
         Properties properties = new Properties();
 
         properties.setProperty("user", "postgres");
-        properties.setProperty("password", "root");
+        properties.setProperty("password", "admin");
 
         Connection conexao = null;
 

@@ -10,9 +10,9 @@ public class AlunoCRUDServiceImpl implements AlunoCRUDService {
 
     @Override
     public Aluno salvarAluno(Aluno aluno) {
-        System.out.println("Iniciou salvarAluno() " + aluno.toString());
+        System.out.println("Inicou o salvamento do aluno" + aluno.toString());
         repository.salvar(aluno);
-        System.out.println("Finalizou" + aluno.toString());
+        System.out.println("Finalizo o salvamento do aluno " + aluno.toString());
         return aluno;
     }
 

@@ -4,7 +4,7 @@ import br.edu.utfpr.database.ConnectDataBase;
 import br.edu.utfpr.sql.CreateTableHelper;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,7 +12,6 @@ import java.sql.SQLException;
 
 @Getter
 @Setter
-@ToString
 public abstract class Model {
 
     private int id;
@@ -22,7 +21,7 @@ public abstract class Model {
     public void createTable() {
         try {
             Connection conn = ConnectDataBase.createConnections();
-            System.out.println("Criando tabela " +  this.getClass().getSimpleName());
+
             PreparedStatement psCreate = conn.prepareStatement(
                     generateCreateTableSQL().getCreateTable());
             PreparedStatement psDrop = conn.prepareStatement(
@@ -36,7 +35,7 @@ public abstract class Model {
             conn.close();
 
         } catch (SQLException e) {
-            System.out.println("ERRO AO CRIAR TABELA " + this.getClass().getSimpleName());
+            System.out.println("ERRO AO CRIAR TABELA");
             e.printStackTrace();
         }
     }
