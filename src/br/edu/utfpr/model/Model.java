@@ -33,7 +33,6 @@ public abstract class Model {
             psCreate.close();
             psDrop.close();
             conn.close();
-
         } catch (SQLException e) {
             System.out.println("ERRO AO CRIAR TABELA");
             e.printStackTrace();

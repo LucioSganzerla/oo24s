@@ -11,20 +11,18 @@ import java.time.format.DateTimeFormatter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString(callSuper = true)
 public class Aluno extends Model {
+
+    private DateTimeFormatter df = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     private String nome;
     private String telefone;
-    private String email;
-    private LocalDate dataNascimento;
+    private String email = "Email não informado";
+    private LocalDate dataNascimento = LocalDate.parse("01/01/2000", df);
 
     public Aluno(String nome, String telefone) {
         this.nome = nome;
         this.telefone = telefone;
-        this.email = "Email não informado";
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        this.dataNascimento = LocalDate.parse("01/01/2000", df);
     }
 
     @Override
