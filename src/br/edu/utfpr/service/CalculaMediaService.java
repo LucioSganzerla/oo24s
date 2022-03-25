@@ -15,8 +15,6 @@ public class CalculaMediaService {
 
     public List<AlunoMediaTO> porDisciplina(Disciplina disciplina) {
         List<Aluno> alunos = alunoService.buscaPorDisciplina(disciplina);
-
-
         return new ArrayList<>();
     }
 }

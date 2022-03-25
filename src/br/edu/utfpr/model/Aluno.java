@@ -62,7 +62,7 @@ public class Aluno extends Model{
                     "nome VARCHAR(50) NOT NULL, " +
                     "telefone VARCHAR(20) NOT NULL, " +
                     "email VARCHAR(70) NOT NULL, " +
-                    "dataNascimento DATE NOT NULL" +
+                    "dataNascimento DATE NOT NULL, " +
                     "id_disciplina INT NULL );";
 
 
