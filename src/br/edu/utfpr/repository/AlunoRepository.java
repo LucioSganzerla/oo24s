@@ -2,40 +2,142 @@ package br.edu.utfpr.repository;
 
 import br.edu.utfpr.database.ConnectDataBase;
 import br.edu.utfpr.model.Aluno;
+import br.edu.utfpr.model.Disciplina;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
-public class AlunoRepository {
+import static java.sql.Statement.*;
 
-    public Aluno salvar(Aluno aluno) {
-        Connection con = ConnectDataBase.createConnections();
-        int linhasAfetadas = 0;
+public class AlunoRepository implements Repository<Aluno> {
+
+    @Override
+    public List<Aluno> buscarTodos() {
+        Connection conn = ConnectDataBase.createConnections();
+        List<Aluno> retorno = new ArrayList<>();
         try {
-            PreparedStatement statement = con.prepareStatement("INSERT INTO aluno (nome, telefone, email, dataNascimento) VALUES (?, ?, ?, ?)",
-                    PreparedStatement.RETURN_GENERATED_KEYS);
-            statement.setString(1, aluno.getNome());
-            statement.setString(2, aluno.getTelefone());
-            statement.setString(3, aluno.getEmail());
-            statement.setDate(4, Date.valueOf(aluno.getDataNascimento()));
-            linhasAfetadas = statement.executeUpdate();
-
-            if (linhasAfetadas == 0) {
-                System.out.println("Não foi possível salvar o aluno " + aluno.getNome().toUpperCase());
-            } else {
-                ResultSet getGeneratedKeys = statement.getGeneratedKeys();
-                if (getGeneratedKeys.next()) {
-                    aluno.setId(getGeneratedKeys.getInt(1));
-                    System.out.println("Aluno " + aluno.getNome().toUpperCase() + " salvo com sucesso!");
-                }
+            PreparedStatement psBuscar = conn.prepareStatement(
+                    "SELECT * FROM aluno"
+            );
+            psBuscar.executeQuery();
+            ResultSet resultSet = psBuscar.getResultSet();
+            while (resultSet.next()) {
+                retorno.add(
+                        new Aluno(
+                                resultSet.getInt(1),
+                                resultSet.getString(2),
+                                resultSet.getString(3),
+                                resultSet.getString(4),
+                                LocalDate.parse(resultSet.getString(5))
+                        )
+                );
             }
-            statement.close();
-            con.close();
+            psBuscar.close();
+            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Erro ao cadastrar aluno");
         }
+        return retorno;
+    }
 
+    @Override
+    public Aluno salvar(Aluno aluno) {
+        Connection conn = ConnectDataBase.createConnections();
+        try {
+            PreparedStatement psSalvar = conn.prepareStatement(
+                    "INSERT INTO aluno(nome, telefone, email, dataNascimento) " +
+                            "VALUES(?, ?, ?, ?)", RETURN_GENERATED_KEYS
+            );
+            psSalvar.setString(1, aluno.getNome());
+            psSalvar.setString(2, aluno.getTelefone());
+            psSalvar.setString(3, aluno.getEmail());
+            psSalvar.setDate(4, Date.valueOf(aluno.getDataNascimento()));
+
+            int linhasAfetadas = psSalvar.executeUpdate();
+            ResultSet generatedKeys = psSalvar.getGeneratedKeys();
+
+            if(linhasAfetadas == 0)
+                System.out.printf("ERRO AO ADICIONAR ALUNO %s%n", aluno.getNome().toUpperCase());
+            else {
+                if(generatedKeys.next())
+                    aluno.setId(generatedKeys.getInt(1));
+            }
+            psSalvar.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("ERRO AO CADASTRAR ALUNO");
+        }
         return aluno;
+    }
+
+    @Override
+    public Aluno atualizar(Aluno aluno) {
+        return null;
+    }
+
+    @Override
+    public boolean remover(Aluno aluno) {
+        remover(aluno.getId());
+        return false;
+    }
+
+    @Override
+    public boolean remover(int i) {
+        Connection conn = ConnectDataBase.createConnections();
+        try {
+            PreparedStatement psExcluir = conn.prepareStatement("" +
+                    "DELETE FROM aluno WHERE id=?"
+            );
+            psExcluir.setInt(1, i);
+            int linhasAfetadas = psExcluir.executeUpdate();
+
+            psExcluir.close();
+            conn.close();
+
+            if(linhasAfetadas == 0) return true;
+            else return false;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("ERRO AO CADASTRAR ALUNO");
+        }
+        return false;
+    }
+
+    public List<Aluno> buscarPorDisciplina(Disciplina disciplina) {
+     return buscarPorDisciplina(disciplina.getId());
+    }
+
+    public List<Aluno> buscarPorDisciplina(int id) {
+        Connection conn = ConnectDataBase.createConnections();
+        List<Aluno> retorno = new ArrayList<>();
+        try {
+            PreparedStatement psBuscar = conn.prepareStatement(
+                    "SELECT * FROM aluno WHERE id_disciplina = ?"
+            );
+            psBuscar.setInt(1, id);
+            psBuscar.executeQuery();
+            ResultSet resultSet = psBuscar.getResultSet();
+            while (resultSet.next()) {
+                retorno.add(
+                        new Aluno(
+                                resultSet.getInt(1),
+                                resultSet.getString(2),
+                                resultSet.getString(3),
+                                resultSet.getString(4),
+                                LocalDate.parse(resultSet.getString(5)),
+                                resultSet.getInt(5)
+                                )
+                );
+            }
+            psBuscar.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return retorno;
     }
 
 }
