@@ -1,9 +1,6 @@
 package br.edu.utfpr.sql;
 
-import br.edu.utfpr.model.Aluno;
-import br.edu.utfpr.model.Avaliacao;
-import br.edu.utfpr.model.Disciplina;
-import br.edu.utfpr.model.Model;
+import br.edu.utfpr.model.*;
 
 import java.util.List;
 
@@ -12,7 +9,8 @@ public class TableControl {
             List.of(
                     new Aluno(),
                     new Disciplina(),
-                    new Avaliacao()
+                    new Avaliacao(),
+                    new AlunoDisciplina()
             );
 
     public static void createTablesV1(){

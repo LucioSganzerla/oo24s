@@ -21,21 +21,7 @@ public class AlunoRepository implements Repository<Aluno> {
             PreparedStatement psBuscar = conn.prepareStatement(
                     "SELECT * FROM aluno"
             );
-            psBuscar.executeQuery();
-            ResultSet resultSet = psBuscar.getResultSet();
-            while (resultSet.next()) {
-                retorno.add(
-                        new Aluno(
-                                resultSet.getInt(1),
-                                resultSet.getString(2),
-                                resultSet.getString(3),
-                                resultSet.getString(4),
-                                LocalDate.parse(resultSet.getString(5))
-                        )
-                );
-            }
-            psBuscar.close();
-            conn.close();
+            findAndBuild(conn, retorno, psBuscar);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -93,12 +79,10 @@ public class AlunoRepository implements Repository<Aluno> {
             );
             psExcluir.setInt(1, i);
             int linhasAfetadas = psExcluir.executeUpdate();
-
             psExcluir.close();
             conn.close();
 
-            if(linhasAfetadas == 0) return true;
-            else return false;
+            return linhasAfetadas == 0;
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("ERRO AO CADASTRAR ALUNO");
@@ -115,29 +99,32 @@ public class AlunoRepository implements Repository<Aluno> {
         List<Aluno> retorno = new ArrayList<>();
         try {
             PreparedStatement psBuscar = conn.prepareStatement(
-                    "SELECT * FROM aluno WHERE id_disciplina = ?"
+                    "SELECT a.* FROM aluno a " +
+                    "INNER JOIN aluno_disciplina d on d.id_disciplina = ?"
             );
             psBuscar.setInt(1, id);
-            psBuscar.executeQuery();
-            ResultSet resultSet = psBuscar.getResultSet();
-            while (resultSet.next()) {
-                retorno.add(
-                        new Aluno(
-                                resultSet.getInt(1),
-                                resultSet.getString(2),
-                                resultSet.getString(3),
-                                resultSet.getString(4),
-                                LocalDate.parse(resultSet.getString(5)),
-                                resultSet.getInt(5)
-                                )
-                );
-            }
-            psBuscar.close();
-            conn.close();
+            findAndBuild(conn, retorno, psBuscar);
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return retorno;
+    }
+
+    private void findAndBuild(Connection conn, List<Aluno> retorno, PreparedStatement psBuscar) throws SQLException {
+        psBuscar.executeQuery();
+        ResultSet resultSet = psBuscar.getResultSet();
+        while (resultSet.next()) {
+            Aluno aluno = Aluno.builder()
+                    .nome(resultSet.getString(2))
+                    .telefone(resultSet.getString(3))
+                    .email(resultSet.getString(4))
+                    .dataNascimento(LocalDate.parse(resultSet.getString(5)))
+                    .build();
+            aluno.setId(resultSet.getInt(1));
+            retorno.add(aluno);
+        }
+        psBuscar.close();
+        conn.close();
     }
 
 }

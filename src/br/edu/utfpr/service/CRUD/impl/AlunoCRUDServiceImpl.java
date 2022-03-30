@@ -48,6 +48,9 @@ public class AlunoCRUDServiceImpl implements AlunoCRUDService {
 
     @Override
     public List<Aluno> buscaPorDisciplina(Disciplina disciplina) {
-        return null;
+        log(INFO, "Iniciar busca de alunos da disciplina " + disciplina.getNome());
+        var retorno = repository.buscarPorDisciplina(disciplina.getId());
+        log(INFO, "finalizou busca alunos");
+        return retorno;
     }
 }
