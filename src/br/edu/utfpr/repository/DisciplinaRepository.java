@@ -8,4 +8,5 @@ public class DisciplinaRepository extends RepositoryImpl<DisciplinaStatement, Di
     public DisciplinaStatement getInstanceOfT() {
         return new DisciplinaStatement();
     }
+
 }

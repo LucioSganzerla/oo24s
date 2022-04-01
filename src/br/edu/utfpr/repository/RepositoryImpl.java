@@ -4,7 +4,10 @@ import br.edu.utfpr.database.ConnectDataBase;
 import br.edu.utfpr.model.Model;
 import br.edu.utfpr.statement.Statement;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +19,7 @@ public abstract class RepositoryImpl<T extends Statement, R extends Model> imple
     public void createTable() {
         try {
             Connection conn = ConnectDataBase.connect();
-            System.out.println("Criando tabela " +  this.getClass().getSimpleName());
+            System.out.println("Criando tabela " + this.getClass().getSimpleName());
             PreparedStatement psCreate = conn.prepareStatement(
                     getInstanceOfT().sqlCreateTable());
             PreparedStatement psDrop = conn.prepareStatement(
@@ -39,9 +42,7 @@ public abstract class RepositoryImpl<T extends Statement, R extends Model> imple
     public void salvar(Model r) {
         Connection conn = ConnectDataBase.connect();
         try {
-            PreparedStatement psSalvar =
-                    getInstanceOfT().salvar(conn, r);
-
+            PreparedStatement psSalvar = getInstanceOfT().salvar(conn, r);
             int linhasAfetadas = psSalvar.executeUpdate();
             psSalvar.close();
             conn.close();

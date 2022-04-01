@@ -13,13 +13,13 @@ public class ConnectDataBase {
         Properties properties = new Properties();
 
         properties.setProperty("user", "postgres");
-        properties.setProperty("password", "root");
+        properties.setProperty("password", "admin");
 
         Connection conexao = null;
 
         try {
-            conexao = DriverManager
-                    .getConnection(DATABASE_URL, properties);
+            conexao = DriverManager.getConnection(DATABASE_URL, properties);
+            conexao.setSchema("oo24s");
         } catch (SQLException ex) {
             System.out.println("ERRO AO CRIAR CONEXÃO");
             System.out.println(ex.getMessage());

@@ -5,7 +5,9 @@ import lombok.Data;
 
 @Data
 @Builder
-public class Disciplina implements Model{
-    private int id;
+public class Disciplina implements Model {
+
+    private Long id;
     private String nome;
+
 }

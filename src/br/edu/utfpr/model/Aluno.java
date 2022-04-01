@@ -7,10 +7,12 @@ import java.time.LocalDate;
 
 @Data
 @Builder
-public class Aluno implements Model{
-    private int id;
+public class Aluno implements Model {
+
+    private Long id;
     private String nome;
     private String telefone;
     private String email;
     private LocalDate dataNascimento;
+
 }

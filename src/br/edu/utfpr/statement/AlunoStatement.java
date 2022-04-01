@@ -9,12 +9,11 @@ import java.util.List;
 
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 
-public class AlunoStatement implements Statement<Aluno>{
+public class AlunoStatement implements Statement<Aluno> {
 
     @Override
     public String sqlCreateTable() {
-        return "" +
-                "CREATE TABLE IF NOT EXISTS aluno (" +
+        return "CREATE TABLE IF NOT EXISTS aluno (" +
                 "id SERIAL PRIMARY KEY, " +
                 "nome VARCHAR(50) NOT NULL, " +
                 "telefone VARCHAR(20) NOT NULL, " +
@@ -24,8 +23,7 @@ public class AlunoStatement implements Statement<Aluno>{
 
     @Override
     public String sqlDropTable() {
-        return "" +
-                "DROP TABLE IF EXISTS aluno";
+        return "DROP TABLE IF EXISTS aluno";
     }
 
     @Override
@@ -51,7 +49,7 @@ public class AlunoStatement implements Statement<Aluno>{
     @Override
     public Aluno convertResultToObject(ResultSet resultSet) throws SQLException {
         return Aluno.builder()
-                .id(resultSet.getInt(1))
+                .id(resultSet.getLong(1))
                 .nome(resultSet.getString(2))
                 .telefone(resultSet.getString(3))
                 .email(resultSet.getString(4))
@@ -65,7 +63,10 @@ public class AlunoStatement implements Statement<Aluno>{
         while (resultSet.next()) {
             Aluno aluno = convertResultToObject(resultSet);
             result.add(aluno);
-        };
+        }
         return result;
     }
+
+
+
 }
