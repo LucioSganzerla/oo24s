@@ -59,23 +59,23 @@ public class Main {
         System.out.println("Avaliações cadastradas: ");
         avaliacaoRepository.findAll().forEach(System.out::println);
 
-        System.out.println(String.format("Méida Geral do aluno %s:", a1.getNome()));
+        System.out.printf("Méida Geral do aluno %s:\n", a1.getNome());
         System.out.println(mathRepository.calcularMedia(avaliacaoRepository.findAll().stream().filter(a ->
                 a.getId_aluno().equals(a1.getId())).collect(Collectors.toList())));
 
-        System.out.println(String.format("Media do aluno na disciplina %s:", d1.getNome()));
+        System.out.printf("Media do aluno %s na disciplina %s:\n", a1, d1.getNome());
         System.out.println(mathRepository.calcularMedia(avaliacaoRepository.findAll().stream().filter(a ->
                 a.getId_aluno().equals(a1.getId()) && a.getId_disciplina().equals(d1.getId())).collect(Collectors.toList())));
 
-        System.out.println(String.format("Media do aluno na disciplina %s:", d2.getNome()));
+        System.out.printf("Media do aluno %s na disciplina %s:\n", a1, d2.getNome());
         System.out.println(mathRepository.calcularMedia(avaliacaoRepository.findAll().stream().filter(a ->
                 a.getId_aluno().equals(a1.getId()) && a.getId_disciplina().equals(d2.getId())).collect(Collectors.toList())));
 
-        System.out.println(String.format("Méida Geral da disciplina %s: ", d1.getNome()));
+        System.out.printf("Méida Geral da disciplina %s:\n", d1.getNome());
         System.out.println(mathRepository.calcularMedia(avaliacaoRepository.findAll().stream().filter(a ->
                 a.getId_disciplina().equals(d1.getId())).collect(Collectors.toList())));
 
-        System.out.println(String.format("Méida Geral da disciplina %s: ", d2.getNome()));
+        System.out.printf("Méida Geral da disciplina %s:\n", d2.getNome());
         System.out.println(mathRepository.calcularMedia(avaliacaoRepository.findAll().stream().filter(a ->
                 a.getId_disciplina().equals(d2.getId())).collect(Collectors.toList())));
 
