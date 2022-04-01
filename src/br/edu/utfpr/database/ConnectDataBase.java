@@ -6,15 +6,14 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class ConnectDataBase {
-
     private static final
     String DATABASE_URL = "jdbc:postgresql://localhost/utfpr";
 
-    public static Connection createConnections() {
+    public static Connection connect() {
         Properties properties = new Properties();
 
         properties.setProperty("user", "postgres");
-        properties.setProperty("password", "admin");
+        properties.setProperty("password", "root");
 
         Connection conexao = null;
 
@@ -25,7 +24,7 @@ public class ConnectDataBase {
             System.out.println("ERRO AO CRIAR CONEXÃO");
             System.out.println(ex.getMessage());
         }
-
         return conexao;
     }
+
 }
