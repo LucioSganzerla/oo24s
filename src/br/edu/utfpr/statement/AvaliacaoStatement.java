@@ -4,7 +4,6 @@ import br.edu.utfpr.database.ConnectDataBase;
 import br.edu.utfpr.model.Aluno;
 import br.edu.utfpr.model.Avaliacao;
 import br.edu.utfpr.model.Disciplina;
-import br.edu.utfpr.model.Model;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -68,5 +67,34 @@ public class AvaliacaoStatement implements Statement<Avaliacao> {
         }
         return result;
     }
+
+    public List<Avaliacao> findAllByDisciplina(Disciplina disciplina) throws SQLException {
+        Connection conn = ConnectDataBase.connect();
+        PreparedStatement result = conn.prepareStatement(
+                "SELECT * FROM avaliacao where id_disciplina = ?"
+        );
+        result.setLong(1, disciplina.getId());
+        return convertResultToObjectList(result.executeQuery());
+    }
+
+    public List<Avaliacao> findAllByAluno(Aluno aluno) throws SQLException {
+        Connection conn = ConnectDataBase.connect();
+        PreparedStatement result = conn.prepareStatement(
+                "SELECT * FROM avaliacao where id_aluno = ?"
+        );
+        result.setLong(1, aluno.getId());
+        return convertResultToObjectList(result.executeQuery());
+    }
+
+    public List<Avaliacao> findAllByAlunoDisciplina(Aluno aluno, Disciplina disciplina) throws SQLException {
+        Connection conn = ConnectDataBase.connect();
+        PreparedStatement result = conn.prepareStatement(
+                "SELECT * FROM avaliacao where id_aluno = ? and id_disciplina = ?"
+        );
+        result.setLong(1, aluno.getId());
+        result.setLong(2, disciplina.getId());
+        return convertResultToObjectList(result.executeQuery());
+    }
+
 
 }
